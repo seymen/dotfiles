@@ -82,6 +82,7 @@ map <C-J> <C-W>j
 map <C-K> <C-W>k
 map <C-H> <C-W>h
 map <C-L> <C-W>l
+
 " jump to previous window (for buffer :bp<CR>, for tab :tabp<CR>)
 map <S-H> :bp<CR>
 " jump to next window (for buffer :bn<CR>, for tab :tabn<CR>)
@@ -105,8 +106,9 @@ nmap :bd :bp <BAR> bd #<CR>
 " close current buffer
 nmap <D-w> :Bclose<CR>
 
-" move line at the end of the previous line
-" nmap <C-k> ^d$k$pjdd$
+" my surround mappings using vim-surround
+nmap "" ysiw"
+nmap '' ysiw'
 
 " for tmux extended mouse mode
 set mouse+=a
