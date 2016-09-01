@@ -16,20 +16,23 @@ Plug 'easymotion/vim-easymotion'
 Plug 'rstacruz/sparkup'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'chriskempson/base16-vim'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'junegunn/goyo.vim'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-eunuch'
+Plug 'joshdick/onedark.vim'
+Plug 'ddrscott/vim-side-search'
 call plug#end()
 
-let mapleader=","
+let mapleader="\<Space>"
 
 syntax on
 filetype plugin on
 
-colorscheme base16-default
 set background=dark
-highlight LineNr ctermfg=red
+colorscheme onedark
 
+set guifont=Menlo:h12
 set hidden
 set autoindent
 set confirm
@@ -54,10 +57,14 @@ set expandtab
 " enable backspace in insert mode
 set nocompatible
 set backspace=2
+" line spacing
+set linespace=4
 " cursor shape - bar in insert mode, block in normal mode
 :let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 " for tmux mouse to work
 set mouse=a
+" remove right scrollbar
+set guioptions-=r
 
 " line numbering
 autocmd InsertEnter * set relativenumber!
@@ -109,12 +116,29 @@ nmap <D-w> :Bclose<CR>
 " my surround mappings using vim-surround
 nmap "" ysiw"
 nmap '' ysiw'
+nmap `` ysiw`
+
+" mapping for :noh - clears search highlight and also clears the screen
+nnoremap <C-c> :nohlsearch<CR><C-l>
 
 " for tmux extended mouse mode
 set mouse+=a
 if &term =~ '^screen'
 	set ttymouse=xterm2
 endif
+
+" new vertical split
+nmap <leader>vs :botright vnew<CR>
+
+" automatically jump to end of text you pasted
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" replace operation - yank something first and then
+" replace in tag
+nmap rit "_cit<ESC>p
+nmap raw "_caw<ESC>p
 
 " Plugin configurations
 " ---------------------------------------------------------------------------
@@ -147,7 +171,7 @@ let g:neomake_javascript_enabled_makers = ['jshint']
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 " this will feed the current word under cursor to CtrlP plugin
-map <leader>p :CtrlP<CR><C-\>w
+map <leader>w :CtrlP<CR><C-\>w
 " CtrlP plugin to use the directory you started vim as root
 let g:ctrlp_working_path_mode = 0
 " rmap to Cmd+T
@@ -179,3 +203,8 @@ function! s:align()
 		call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
 	endif
 endfunction
+
+" mapping specific to apigee
+
+" open policy file from proxy
+map <leader>p vit<ESC>:CtrlP<CR><C-\>v<CR>
