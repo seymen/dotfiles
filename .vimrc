@@ -22,6 +22,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'joshdick/onedark.vim'
 Plug 'ddrscott/vim-side-search'
+Plug 'SirVer/ultisnips'
 call plug#end()
 
 let mapleader="\<Space>"
@@ -204,7 +205,15 @@ function! s:align()
 	endif
 endfunction
 
+" ultisnip
+let g:UltiSnipsExpandTrigger="<Enter>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 " mapping specific to apigee
 
 " open policy file from proxy
 map <leader>p vit<ESC>:CtrlP<CR><C-\>v<CR>
+
+" create a policy file by extracting the name from inside tags
+nmap aanp yit:e apiproxy/stepdefinitions/<C-R>".xml<CR>
