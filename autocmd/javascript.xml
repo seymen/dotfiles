@@ -1,0 +1,5 @@
+:insert
+<JavaScript name="JavaScript.$1">
+	<ResourceURL>jsc://$1.js</ResourceURL>
+</Javascript>
+.

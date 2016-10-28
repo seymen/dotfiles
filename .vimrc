@@ -1,28 +1,26 @@
-" call plug#begin('~/.config/nvim/plugged')
 call plug#begin('~/.vim/plugged')
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'neomake/neomake'
 Plug 'shutnik/jshint2.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'scrooloose/nerdtree', {'on':'NERDTreeToggle'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdtree' | Plug 'ryanoasis/vim-devicons'
 Plug 'mileszs/ack.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'tomtom/tcomment_vim'
-Plug 'pangloss/vim-javascript'
 Plug 'godlygeek/tabular'
-Plug 'vim-airline/vim-airline'
-Plug 'tpope/vim-surround'
-Plug 'easymotion/vim-easymotion'
-Plug 'rstacruz/sparkup'
 Plug 'jszakmeister/vim-togglecursor'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'rbgrouleff/bclose.vim'
-Plug 'junegunn/goyo.vim'
+Plug 'SirVer/ultisnips'
+Plug 'pangloss/vim-javascript'
+Plug 'joshdick/onedark.vim'
+
+Plug 'neomake/neomake'
+Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
-Plug 'joshdick/onedark.vim'
-Plug 'ddrscott/vim-side-search'
-Plug 'SirVer/ultisnips'
+Plug 'sukima/xmledit'
+Plug 'junegunn/vim-emoji'
 call plug#end()
 
 let mapleader="\<Space>"
@@ -33,7 +31,11 @@ filetype plugin on
 set background=dark
 colorscheme onedark
 
-set guifont=Menlo:h12
+set encoding=utf8
+
+" set guifont=Menlo:h12
+set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete:h14
+set guioptions-=L " remove the left scrollbar in nerdtree
 set hidden
 set autoindent
 set confirm
@@ -97,7 +99,7 @@ map <S-H> :bp<CR>
 map <S-L> :bn<CR>
 
 " shift-enter in normal mode to insert a new-line before the current line
-nmap <S-Enter> O<Esc>
+nmap <S-CR> O<Esc>
 " enter in normal mode to insert a new line after the current line
 nmap <CR> o<Esc>
 
@@ -125,7 +127,7 @@ nnoremap <C-c> :nohlsearch<CR><C-l>
 " for tmux extended mouse mode
 set mouse+=a
 if &term =~ '^screen'
-	set ttymouse=xterm2
+    set ttymouse=xterm2
 endif
 
 " new vertical split
@@ -140,6 +142,11 @@ nnoremap <silent> p p`]
 " replace in tag
 nmap rit "_cit<ESC>p
 nmap raw "_caw<ESC>p
+
+augroup my_commands
+    autocmd!
+    " autocmd BufWritePre,BufRead *.xml :normal gg=G
+augroup END
 
 " Plugin configurations
 " ---------------------------------------------------------------------------
@@ -190,30 +197,53 @@ nmap <leader>f :Ack!<CR><C-\>w
 " nerdtree
 map <silent> <F5> :NERDTreeToggle<CR>
 map <silent> <C-n> :NERDTreeFocus<CR>
+let g:NERDTreeMouseMode=3 " single-click opens file
 
 " tabularize
 " run Tabularize each time I press | character
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 function! s:align()
-	let p = '^\s*|\s.*\s|\s*$'
-	if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-		let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-		let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-		Tabularize/|/l1
-		normal! 0
-		call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-	endif
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
 endfunction
 
 " ultisnip
-let g:UltiSnipsExpandTrigger="<Enter>"
+let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
+" vim-emoji
+let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
+let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
+let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
+let g:gitgutter_sign_modified_removed = emoji#for('collision')
+
+" vim-devicons
+set ambiwidth=double
+let g:airline_powerline_fonts = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes=1
+let g:WebDevIconsNerdTreeAfterGlyphPadding=''
+let g:WebDevIconsNerdTreeGitPluginForceVAlign=0
+
 " mapping specific to apigee
 
-" open policy file from proxy
+" open policy file from proxy definition
 map <leader>p vit<ESC>:CtrlP<CR><C-\>v<CR>
-
 " create a policy file by extracting the name from inside tags
 nmap aanp yit:e apiproxy/stepdefinitions/<C-R>".xml<CR>
+" create a JavaScript policy definition for the current JS file
+nmap aacp :e apiproxy/stepdefinitions/JavaScript.%:t:r.xml<CR>
+
+augroup apigee_javascript_snippets
+    " snippet#InsertSkeleton is under .vim/autoload/snippet.vim
+    autocmd!
+    " autocmd BufNewFile apiproxy/resources/jsc/*.js :w apiproxy/stepdefinitions/JavaScript.%:t:r.xml
+    autocmd BufNewFile apiproxy/stepdefinitions/JavaScript.* silent! call snippet#InsertSkeleton('_javascript')
+    autocmd BufNewFile apiproxy/stepdefinitions/AssignMessage.* silent! call snippet#InsertSkeleton('_assignmessage')
+augroup END
