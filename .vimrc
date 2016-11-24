@@ -105,6 +105,7 @@ nmap <CR> o<Esc>
 
 " special pairing for {}
 imap {{ {<CR>}<ESC>O
+imap {{; {<CR>};<ESC>O
 imap {{{ {<CR>});<ESC>O
 
 " ability to go to the end of the file in insert mode
@@ -142,6 +143,10 @@ nnoremap <silent> p p`]
 " replace in tag
 nmap rit "_cit<ESC>p
 nmap raw "_caw<ESC>p
+
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
 
 augroup my_commands
     autocmd!
