@@ -1,168 +1,116 @@
 call plug#begin('~/.vim/plugged')
+Plug 'w0rp/ale'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ap/vim-buftabline'
 Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
-Plug 'rbgrouleff/bclose.vim'
 Plug 'SirVer/ultisnips'
-Plug 'pangloss/vim-javascript'
-Plug 'w0rp/ale'
-Plug 'Townk/vim-autoclose'
-Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-commentary'
 Plug 'sukima/xmledit'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 let mapleader="\<Space>"
 
 syntax on
 filetype plugin indent on
-
-if has("gui_running")
-    set guifont=Andale\ Mono:h14
-    colorscheme desert
-endif
-
 set encoding=utf8
-
-set guioptions-=L " remove the left scrollbar in nerdtree
-set guioptions-=r "remove right scrollbar
 set hidden
-set autoindent
+filetype indent on
+set nowrap
 set confirm
-set number " show line numbers
-set ts=4 " set tab size to 4
-set sw=4 " set shift width which is the one used when >
-set noswapfile " disable vim creating swp files
-" set cursorline " display the cursor line
-set updatetime=750 " setting vim ui update to 750ms for gitgutter updates
-set laststatus=2 "The default setting of 'laststatus' is for the statusline to not appear until a split is created. this is to set it to appear all the time
-set undolevels=1000
-set hlsearch " this will highlight all occurances of the search term on the file. In order to clear highlight, do :noh
-set incsearch " do search as you type
-set showcmd " displays commands you type in normal mode
-set clipboard=unnamed " use OS clipboard for all operations
+set autoindent
+set number "show line numbers
+set ts=4 "tab size"
+set sw=4 "shift width which is the one used when >
 set expandtab
-set nocompatible " enable backspace in insert mode
+set smartindent
+set autoindent
+set noswapfile "disable vim creating swp files
+set updatetime=750 "ui to update in 750ms for gitgutter renderings"
+set undolevels=1000
+set history=100
+set showcmd "displays commands you type in normal mode
+set clipboard=unnamed "use OS clipboard for all operations
+set splitbelow "open new split below which feels more natural
+set showmatch "highlight matching paranthesis
+set nocompatible
 set backspace=2
-set linespace=4
-" cursor shape - bar in insert mode, block in normal mode
-:let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
-" smooth scrolling of mouse
-set mouse=a
-
-" fix fat-fingers
-map :W :w
-map :Q :q
-
-nnoremap <C-U> :call SmoothScroll(1)<Enter>
-nnoremap <C-D> :call SmoothScroll(0)<Enter>
-inoremap <C-U> <Esc>:call SmoothScroll(1)<Enter>i
-inoremap <C-D> <Esc>:call SmoothScroll(0)<Enter>i
-
-" line numbering
-autocmd InsertEnter * set relativenumber!
-autocmd InsertLeave * set relativenumber
-
-" move between windows
-map <C-J> <C-W>j
-map <C-K> <C-W>k
-map <C-H> <C-W>h
-map <C-L> <C-W>l
-
-" move between buffers
-map <S-H> :bp<CR>
-map <S-L> :bn<CR>
-
-" enter in normal mode to insert a new line after the current line
-nmap <CR> o<Esc>
-
-" special pairing for {}
-imap {{ {<CR>}<ESC>O
-imap {{; {<CR>};<ESC>O
-imap {{{ {<CR>});<ESC>O
-
-" close current buffer
-nmap :bd :bp <BAR> bd #<CR>
-
-" statusline settings
-set statusline=%f%=%{ALEGetStatusLine()}
-
-" my surround mappings using vim-surround
-nmap "" ysiw"
-nmap '' ysiw'
-nmap `` ysiw`
-
-" mapping for :noh - clears search highlight and also clears the screen
-nnoremap <C-c> :nohlsearch<CR><C-l>
-
-" for tmux extended mouse mode
+"mouse support
 set mouse+=a
 if &term =~ '^screen'
     set ttymouse=xterm2
 endif
 
-" new vertical split
+"file searching
+"highlight all occurances of the search term on the file
+set hlsearch
+"ability to cancel a search with Escape
+" nnoremap <silent> <Esc> :nohlsearch<Bar>:echo<CR>
+nnoremap <esc> :noh<return><esc>
+nnoremap <esc>^[ <esc>^[
+"do search as you type
+set incsearch
+
+"fat fingers
+map :W :w
+map :Q :q
+
+"move between windows
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-H> <C-W>h
+map <C-L> <C-W>l
+
+"move between buffers
+map <S-H> :bp<CR>
+map <S-L> :bn<CR>
+
+"ability to select autocomplete (CtrlP in insert mode) with enter key
+inoremap <expr> <silent> <cr> pumvisible() ? "<c-y>" : "<cr>"
+
+"enter in normal mode to insert a new line after the current line
+nmap <CR> o<Esc>
+
+"close current buffer
+nmap :bd :bp <BAR> bd #<CR>
+
+"splits
 nmap <C-i> :botright vnew<CR>
 nmap <C-_> :split<CR>
 
-" toggle comment
-nmap cc <leader>c<space>
-
 " automatically jump to end of text you pasted
-nnoremap <silent> y y`]
-nnoremap <silent> p p`]
-nnoremap <silent> p p`]
+" nnoremap <silent> y y`]
+" nnoremap <silent> p p`]
+" nnoremap <silent> p `]
 
-" replace operation - yank something first and then
-" replace in tag
-nmap rit "_cit<ESC>p
-nmap ri" "_ci"<ESC>p
-nmap raw "_caw<ESC>p
+" yy is broken for some reason
+nmap yy Y
 
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
+" easy switching between buffers
+nmap <leader>b :buffers<CR>:b
 
 " Plugin configurations
 " ---------------------------------------------------------------------------
-
-" Ale
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:ale_set_quickfix = 1
-
-" airline
-" Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
-" Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
-
+"
 " ctrlp
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-" this will feed the current word under cursor to CtrlP plugin
-map <leader>w :CtrlP<CR><C-\>w
-" CtrlP plugin to use the directory you started vim as root
-let g:ctrlp_working_path_mode = 0
-" find hidden dotfiles with CtrlP
-let g:ctrlp_show_hidden = 1
+let g:ctrlp_custom_ignore = {
+            \ 'dir': 'node_modules'
+            \ }
 
 " ack
-" open a new tab and search for something
 nmap <leader>s :Ack! ""<Left>
-" search for word under cursor
-nmap <leader>f :Ack!<CR><C-\>w
+
+" ale
+let g:ale_linters = {'javascript': ['eslint']}
 
 " nerdtree
-map <silent> <F5> :NERDTreeToggle<CR>
-map <silent> <C-n> :NERDTreeFocus<CR>
-let g:NERDTreeMouseMode=3 " single-click opens file
+nmap <leader>n :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
 
 " tabularize
 " run Tabularize each time I press | character
@@ -179,11 +127,12 @@ function! s:align()
 endfunction
 
 " ultisnip
-let g:UltiSnipsExpandTrigger="<c-r>"
+let g:UltiSnipsExpandTrigger="<F6>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetDirectories="~/.vim/UltiSnips"
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+let g:UltiSnipsEditSplit="vertical"
 set rtp+=~/.vim/UltiSnips
 
 " automatically create a file's folder if it doesn't exist
@@ -195,19 +144,7 @@ fun! <SID>AutoMakeDirectory()
 endfun
 autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 
-" mapping specific to apigee
-
+" apigee
 " open policy file from proxy definition
-map <leader>p vit<ESC>:CtrlP<CR><C-\>v<CR>
-" create a policy file by extracting the name from inside tags
-nmap aanp yit:e apiproxy/stepdefinitions/<C-R>".xml<CR>
-" create a JavaScript policy definition for the current JS file
-nmap aacp :e apiproxy/stepdefinitions/JavaScript.%:t:r.xml<CR>
-
-augroup apigee_javascript_snippets
-    " snippet#InsertSkeleton is under .vim/autoload/snippet.vim
-    autocmd!
-    " autocmd BufNewFile apiproxy/resources/jsc/*.js :w apiproxy/stepdefinitions/JavaScript.%:t:r.xml
-    autocmd BufNewFile apiproxy/stepdefinitions/JavaScript.* silent! call snippet#InsertSkeleton('_javascript')
-    autocmd BufNewFile apiproxy/stepdefinitions/AssignMessage.* silent! call snippet#InsertSkeleton('_assignmessage')
-augroup END
+map <leader>p vity<ESC>:CtrlP<CR><C-\>c<CR>
+map <leader>np :e apiproxy/policies/.xml<Left><Left><Left><Left>
