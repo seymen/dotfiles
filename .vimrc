@@ -98,8 +98,10 @@ nmap <leader>b :buffers<CR>:b
 " ---------------------------------------------------------------------------
 "
 " ctrlp
+let g:ctrlp_show_hidden = 1
 let g:ctrlp_custom_ignore = {
-            \ 'dir': 'node_modules'
+            \ 'dir': 'node_modules\|.git',
+            \ 'file': '.DS_Store'
             \ }
 
 " ack
