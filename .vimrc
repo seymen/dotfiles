@@ -11,9 +11,16 @@ Plug 'tpope/vim-commentary'
 Plug 'sukima/xmledit'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-dispatch'
+Plug 'vim-airline/vim-airline'
+Plug 'tomasiser/vim-code-dark'
+Plug 'janko-m/vim-test'
+Plug 'tmsvg/pear-tree'
 call plug#end()
 
 let mapleader="\<Space>"
+
+colorscheme codedark
 
 syntax on
 filetype plugin indent on
@@ -23,9 +30,8 @@ filetype indent on
 set nowrap
 set confirm
 set autoindent
-set number "show line numbers
-set ts=4 "tab size"
-set sw=4 "shift width which is the one used when >
+set ts=2 "tab size"
+set sw=2 "shift width which is the one used when >
 set expandtab
 set smartindent
 set autoindent
@@ -34,11 +40,19 @@ set updatetime=750 "ui to update in 750ms for gitgutter renderings"
 set undolevels=1000
 set history=100
 set showcmd "displays commands you type in normal mode
-set clipboard=unnamed "use OS clipboard for all operations
+set clipboard=unnamedplus "use OS clipboard for all operations
 set splitbelow "open new split below which feels more natural
 set showmatch "highlight matching paranthesis
 set nocompatible
 set backspace=2
+
+"line numbering
+set number relativenumber
+augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
 "mouse support
 set mouse+=a
@@ -83,35 +97,47 @@ nmap :bd :bp <BAR> bd #<CR>
 nmap <C-i> :botright vnew<CR>
 nmap <C-_> :split<CR>
 
-" automatically jump to end of text you pasted
-" nnoremap <silent> y y`]
-" nnoremap <silent> p p`]
-" nnoremap <silent> p `]
-
-" yy is broken for some reason
-nmap yy Y
-
 " easy switching between buffers
 nmap <leader>b :buffers<CR>:b
+
+" automatically create a file's folder if it doesn't exist
+fun! <SID>AutoMakeDirectory()
+    let s:directory = expand("<afile>:p:h")
+    if !isdirectory(s:directory)
+        call mkdir(s:directory, "p")
+    endif
+endfun
+autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
+
+" inoremap " ""<left>
+" inoremap ' ''<left>
+" inoremap ( ()<left>
+" inoremap [ []<left>
+" inoremap { {}<left>
+" inoremap {<CR> {<CR>}<ESC>O
+" inoremap {;<CR> {<CR>};<ESC>O
 
 " Plugin configurations
 " ---------------------------------------------------------------------------
 "
 " ctrlp
 let g:ctrlp_show_hidden = 1
-let g:ctrlp_custom_ignore = {
-            \ 'dir': 'node_modules\|.git',
-            \ 'file': '.DS_Store'
-            \ }
+let g:ctrlp_working_path_mode=0
+set wildignore+=*/node_modules/*,.git
 
 " ack
 nmap <leader>s :Ack! ""<Left>
 
 " ale
 let g:ale_linters = {'javascript': ['eslint']}
+let g:ale_fixers = {}
+let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_javascript_prettier_use_local_config = 1
+let g:ale_fix_on_save = 1
 
 " nerdtree
 nmap <leader>n :NERDTreeFind<CR>
+nmap <leader>/ :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 " tabularize
@@ -137,16 +163,27 @@ let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
 let g:UltiSnipsEditSplit="vertical"
 set rtp+=~/.vim/UltiSnips
 
-" automatically create a file's folder if it doesn't exist
-fun! <SID>AutoMakeDirectory()
-    let s:directory = expand("<afile>:p:h")
-    if !isdirectory(s:directory)
-        call mkdir(s:directory, "p")
-    endif
-endfun
-autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
+" vim-dispatch
+setl errorformat+=%+G%.%# "sets quickfix to stay open even though there are no errors
+":Dispatch command is looking at b:dispatch variable for the command to run
+autocmd FileType javascript let b:dispatch = 'node %' "setting node as the runner for js files
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+
+" vim-test
+let test#strategy="vimterminal"
+
+" pear-tree
+" Smart pairs are disabled by default:
+let g:pear_tree_smart_openers = 1
+let g:pear_tree_smart_closers = 1
+let g:pear_tree_smart_backspace = 1
+
+let g:pear_tree_repeatable_expand = 0
 
 " apigee
 " open policy file from proxy definition
 map <leader>p vity<ESC>:CtrlP<CR><C-\>c<CR>
+map <leader>pp vity<ESC>:vsplit<CR><C-l>:CtrlP<CR><C-\>c<CR>
 map <leader>np :e apiproxy/policies/.xml<Left><Left><Left><Left>
