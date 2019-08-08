@@ -16,6 +16,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'tomasiser/vim-code-dark'
 Plug 'janko-m/vim-test'
 Plug 'tmsvg/pear-tree'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'bigfish/vim-js-context-coloring'
 call plug#end()
 
 let mapleader="\<Space>"
@@ -127,6 +129,9 @@ set wildignore+=*/node_modules/*,.git
 
 " ack
 nmap <leader>s :Ack! ""<Left>
+
+" markdown-preview
+let vim_markdown_preview_github=1
 
 " ale
 let g:ale_linters = {'javascript': ['eslint']}
