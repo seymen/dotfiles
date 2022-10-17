@@ -14,6 +14,7 @@ Plug 'tmsvg/pear-tree'
 Plug 'ap/vim-buftabline'
 Plug 'sheerun/vim-polyglot' "lang specific syntax highlighting
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "auto completion
+Plug 'nbouscal/vim-stylish-haskell'
 "Plug 'JamshedVesuna/vim-markdown-preview'
 " Plug 'bigfish/vim-js-context-coloring'
 call plug#end()
@@ -37,11 +38,10 @@ nmap :bd :bp <BAR> bd #<CR>
 "move between buffers
 map <S-H> :bp<CR>
 map <S-L> :bn<CR>
-"close current buffer
-nmap :bd :bp <BAR> bd #<CR>
 "splits
-nmap <C-i> :botright vnew<CR>
 nmap <C-_> :split<CR>
+"wrap lines to 80 characters. Use gq to reformat an existing content
+au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " automatically create a file's folder if it doesn't exist
 fun! <SID>AutoMakeDirectory()
@@ -52,7 +52,6 @@ fun! <SID>AutoMakeDirectory()
 endfun
 autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 
-
 "line numbering
 set number relativenumber
 augroup numbertoggle
@@ -61,14 +60,13 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
-
 " Plugin configurations
 " ---------------------
 "
 " ctrlp
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode=0
-set wildignore+=*/node_modules/*,.git
+set wildignore+=*/node_modules/*,.git,*/dist-newstyle/*
 
 " ack
 nmap <leader>s :Ack! ""<Left>
@@ -113,3 +111,53 @@ let g:pear_tree_smart_openers = 1
 let g:pear_tree_smart_closers = 1
 let g:pear_tree_smart_backspace = 1
 let g:pear_tree_repeatable_expand = 0
+
+" coc
+set updatetime=300 "having longer updatetime leads to delays and poor user experience
+" set shortmess+=c
+" set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+if has('patch8.1.1068')
+  " Use `complete_info` if your (Neo)Vim version supports it.
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
