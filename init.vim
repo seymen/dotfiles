@@ -1,4 +1,5 @@
 call plug#begin('~/.vim/plugged')
+
 Plug 'w0rp/ale' "linting
 Plug 'bronson/vim-trailing-whitespace' "unnecessary whitespaces at the end of lines
 Plug 'scrooloose/nerdtree'
@@ -15,8 +16,9 @@ Plug 'ap/vim-buftabline'
 Plug 'sheerun/vim-polyglot' "lang specific syntax highlighting
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "auto completion
 Plug 'nbouscal/vim-stylish-haskell'
-"Plug 'JamshedVesuna/vim-markdown-preview'
-" Plug 'bigfish/vim-js-context-coloring'
+Plug 'rust-lang/rust.vim'
+Plug 'nvim-lua/plenary.nvim' "required for crates.vim
+Plug 'saecki/crates.nvim', { 'tag': 'v0.3.0' }
 call plug#end()
 
 let mapleader="\<Space>"
@@ -66,7 +68,7 @@ augroup END
 " ctrlp
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode=0
-set wildignore+=*/node_modules/*,.git,*/dist-newstyle/*
+set wildignore+=*/node_modules/*,.git,*/dist-newstyle/*,*/target/*
 
 " ack
 nmap <leader>s :Ack! ""<Left>
@@ -161,3 +163,11 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" RUST
+let g:rustfmt_autosave = 1
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+
+" crates
+lua require('crates').setup()
