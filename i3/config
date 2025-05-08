@@ -219,3 +219,9 @@ bindsym ctrl+shift+3 exec /home/ozanseymen/.screenlayout/google-hotdesk.sh
 bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 # go to a marker
 bindsym $mod+n exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
+
+# GKE-SEC workshop key bindings
+bindsym --release ctrl+shift+0 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/storage/v1/b?project=gke-sec"'
+bindsym --release ctrl+shift+9 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/storage/v1/b/grafana-bucket-121/o"'
+bindsym --release ctrl+shift+8 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/download/storage/v1/b/grafana-bucket-121/o/super-secret.txt?generation=1741524436104704&alt=media"'
+bindsym --release ctrl+shift+7 exec --no-startup-id xdotool type --clearmodifiers '34.111.17.232.nip.io'
