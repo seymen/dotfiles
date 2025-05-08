@@ -7,7 +7,7 @@ require("mason-lspconfig").setup({
   -- https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
   ensure_installed = {
     "lua_ls",
-    "rust_analyzer"
+    "gopls",
   }
 })
 
@@ -21,9 +21,22 @@ local lspconfig = require("lspconfig")
 vim.keymap.set('n', '<leader>lh', vim.lsp.buf.hover, {})
 vim.keymap.set('n', '<leader>ld', vim.lsp.buf.definition, {})
 vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, {})
+vim.keymap.set('n', '<leader>li', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled()) end, {})
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- setting for lua
 lspconfig.lua_ls.setup({capabilities = capabilities})
-lspconfig.rust_analyzer.setup({capabilities = capabilities})
+lspconfig.gopls.setup({
+  capabilities = capabilities,
+  settings = {
+    gopls = {
+      completeUnimported = true, -- imports used packages when autocomplete is triggered
+      usePlaceholders = true, -- prints function parameters as usePlaceholders
+      analyses = {
+        unusedparams = true -- display warning when there is unused parameters
+      }
+    }
+  }
+})
+
