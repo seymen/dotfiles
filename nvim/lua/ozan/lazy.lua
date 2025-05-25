@@ -48,7 +48,6 @@ local plugins = {
   },
   { -- all lsp plugins
     "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
   },
   {
@@ -63,6 +62,17 @@ local plugins = {
   { -- code completions
     'hrsh7th/nvim-cmp',
     'hrsh7th/cmp-nvim-lsp',
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "InsertEnter",
+    opts = {
+      bind = true,
+      floating_window = true,
+      handler_opts = {
+        border = "rounded"
+      }
+    },
   },
   { -- code snippets
     'L3MON4D3/LuaSnip',

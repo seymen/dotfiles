@@ -2,14 +2,6 @@
 
 -- setup language servers
 require("mason").setup()
-require("mason-lspconfig").setup({
-  -- list of all lsp servers:
-  -- https://github.com/williamboman/mason-lspconfig.nvim?tab=readme-ov-file#available-lsp-servers
-  ensure_installed = {
-    "lua_ls",
-    "gopls",
-  }
-})
 
 -- setup language clients
 -- to add support for another language, add the language under `ensure_installed`
@@ -27,6 +19,8 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- setting for lua
 lspconfig.lua_ls.setup({capabilities = capabilities})
+
+-- settings for golang
 lspconfig.gopls.setup({
   capabilities = capabilities,
   settings = {
