@@ -33,16 +33,16 @@ bindsym $mod+Shift+c kill
 bindsym $mod+p exec rofi -show run
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+j focus left; exec --no-startup-id center-mouse
+bindsym $mod+k focus down; exec --no-startup-id center-mouse
+bindsym $mod+l focus up; exec --no-startup-id center-mouse
+bindsym $mod+semicolon focus right; exec --no-startup-id center-mouse
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+Left focus left; exec --no-startup-id center-mouse
+bindsym $mod+Down focus down; exec --no-startup-id center-mouse
+bindsym $mod+Up focus up; exec --no-startup-id center-mouse
+bindsym $mod+Right focus right; exec --no-startup-id center-mouse
 
 # move focused window
 bindsym $mod+Shift+j move left
@@ -213,7 +213,7 @@ exec_always xinput --set-prop 9 300 -0.9
 # monitor switch
 bindsym ctrl+shift+1 exec /home/ozanseymen/.screenlayout/laptop.sh
 bindsym ctrl+shift+2 exec /home/ozanseymen/.screenlayout/home.sh
-bindsym ctrl+shift+3 exec /home/ozanseymen/.screenlayout/google-hotdesk.sh
+bindsym ctrl+shift+3 exec /home/ozanseymen/.screenlayout/google.sh
 
 # sets a char as a window marker
 bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
