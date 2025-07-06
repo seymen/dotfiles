@@ -9,7 +9,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+
     lazypath,
   })
 end
@@ -21,8 +21,8 @@ local opts = {}
 -- define and list the plugins you want
 local plugins = {
   { -- color theme
-    "catppuccin/nvim",
-    name = "catppuccin",
+    'Mofiqul/vscode.nvim',
+    name = "vscode",
     priority = 1000
   },
   {
@@ -68,7 +68,7 @@ local plugins = {
     event = "InsertEnter",
     opts = {
       bind = true,
-      floating_window = true,
+      floating_window = false,
       handler_opts = {
         border = "rounded"
       }
