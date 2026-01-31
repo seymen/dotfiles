@@ -1,9 +1,12 @@
 
-export PATH=/usr/local/git/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 
 fpath+=('/home/ozanseymen/.nvm/versions/node/v22.15.0/lib/node_modules/pure-prompt/functions')
 
 export PATH=/usr/local/go/bin:$PATH
+export PATH=/home/ozanseymen/go/bin:$PATH
+export PATH=~/.cargo/bin:$PATH
+export PATH=/usr/local/git/current/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 # export ZSH=/Users/ozanseymen/.oh-my-zsh
