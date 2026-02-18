@@ -7,9 +7,9 @@ export PATH=/usr/local/go/bin:$PATH
 export PATH=/home/ozanseymen/go/bin:$PATH
 export PATH=~/.cargo/bin:$PATH
 export PATH=/usr/local/git/current/bin:$PATH
+export PATH=/home/ozanseymen/.local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-# export ZSH=/Users/ozanseymen/.oh-my-zsh
 export ZSH=/home/ozanseymen/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
