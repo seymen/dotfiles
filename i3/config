@@ -158,8 +158,8 @@ bar {
 exec --no-startup-id hsetroot -solid "#000000"
 
 # app specific keyboard shortcuts
-bindsym $mod+o  exec google-chrome --new-window --profile-directory="Default"
-bindsym $mod+i  exec google-chrome --new-window --profile-directory="Profile 1"
+bindsym $mod+o  exec --no-startup-id google-chrome --new-window --profile-directory="Default"
+bindsym $mod+i  exec --no-startup-id google-chrome --new-window --profile-directory="Profile 1"
 
 # class                 border  backgr. text    indicator child_border
 #client.focused          #4c7899 #285577 #ffffff #2e9ef4   #ffffff
@@ -222,7 +222,6 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+n exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 # GKE-SEC workshop key bindings
-bindsym --release ctrl+shift+0 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/storage/v1/b?project=gke-sec"'
-bindsym --release ctrl+shift+9 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/storage/v1/b/grafana-bucket-121/o"'
-bindsym --release ctrl+shift+8 exec --no-startup-id xdotool type --clearmodifiers 'curl -H "Authorization: Bearer $TOKEN" "https://storage.googleapis.com/download/storage/v1/b/grafana-bucket-121/o/super-secret.txt?generation=1741524436104704&alt=media"'
-bindsym --release ctrl+shift+7 exec --no-startup-id xdotool type --clearmodifiers '34.111.17.232.nip.io'
+bindsym --release ctrl+shift+6 exec --no-startup-id "xdotool keyup Control_L Control_R Shift_L Shift_R && xdotool type 'Bu uygulamayı ekibe yeni katılan bir mühendise anlattığını varsay. Uygulamayı yerel ortamda \\"local\\" geliştirme modunda çalıştır ve uygulama için görsel bir rehber oluşturmak üzere Chrome DevTools kullan. Birincil kullanıcı akışını \\"primary user journey\\" adım adım gösteren ekran görüntüleri al, temel özelliklerin nasıl çalıştığını açıkla ve uygulamanın akışı ile mimarisine dair net bir genel bakış sun.'"
+bindsym --release ctrl+shift+7 exec --no-startup-id "xdotool keyup Control_L Control_R Shift_L Shift_R && xdotool type \\"https://github.com/seymen/know-it-all-ist/issues/7 adresindeki GitHub issue'sunu hayata geçirmek (implement etmek) için teknik bir şartname (technical specification) hazırla.\\""
+bindsym --release ctrl+shift+8 exec --no-startup-id "xdotool keyup Control_L Control_R Shift_L Shift_R && xdotool type \\"Güvenlik ekibimiz, kimlik doğrulama (authentication) ve müşteri KVKK/PII verileri ile ilgili uyumluluk açıkları nedeniyle bu eski (legacy) servisi işaretledi. Bir iyileştirme (remediation) planı önermeden önce kurumsal güvenlik duruşumuz ve uyumluluk gereksinimlerimiz hakkında benimle bir mülakat yap.\\""

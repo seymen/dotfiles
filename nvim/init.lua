@@ -24,6 +24,7 @@ vim.opt.termguicolors = true
 vim.opt.updatetime = 300
 -- use the system clipboard
 vim.opt.clipboard = 'unnamedplus'
+vim.diagnostic.config { virtual_lines = true }
 
 ------------------------------------------------------------------
 
@@ -89,10 +90,14 @@ require("lazy").setup({
     'christoomey/vim-tmux-navigator'
   },
   {
-	  'ap/vim-buftabline',
-	  config = function()
-		  vim.g.buftabline_indicators = 1
-	  end
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function() vim.g.barbar_auto_setup = false end,
+    opts = {
+    },
   },
   {
     "nvim-tree/nvim-tree.lua",
@@ -124,7 +129,7 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     config = function()
-      vim.lsp.enable("rust_analyzer")
+      -- vim.lsp.enable("rust_analyzer")
 
       -- check out https://neovim.io/doc/user/lsp.html#_global-defaults
       -- for other key bindings, etc.
@@ -140,7 +145,62 @@ require("lazy").setup({
         end,
       })
     end
-  }
+  },
+  {
+    'hrsh7th/nvim-cmp',
+    config = function()
+      local cmp = require('cmp')
+      vim.api.nvim_set_hl(0, "CmpBorder", { bg = "NONE", fg = "#6587CE" })
+      cmp.setup({
+        mapping = cmp.mapping.preset.cmdline(),
+        window = {
+          -- completion = cmp.config.window.bordered({
+          --   winhighlight = 'Normal:NormalFloat,FloatBorder:CmpBorder,CursorLine:PmenuSel,Search:None',
+          -- }),
+          completion = {
+            border = "rounded",
+            scrollbar = false,
+            winhighlight = 'Normal:NormalFloat,FloatBorder:CmpBorder,CursorLine:PmenuSel,Search:None',
+          },
+          documentation = {
+            border = "rounded",
+            scrollbar = false,
+            winhighlight = 'Normal:NormalFloat,FloatBorder:CmpBorder,CursorLine:PmenuSel,Search:None',
+          },
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'buffer' },
+          { name = 'path' },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        }),
+      })
+    end
+  },
+  {
+    'hrsh7th/cmp-nvim-lsp',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+    },
+    config = function()
+      vim.lsp.enable('gopls')
+    end
+  },
+  {
+    'hrsh7th/cmp-buffer',
+  },
+  {
+    'hrsh7th/cmp-path',
+  },
+  {
+    'hrsh7th/cmp-cmdline',
+  },
 })
 
 --------------- END OF PLUGIN CONFIG ------------------

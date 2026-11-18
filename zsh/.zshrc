@@ -123,3 +123,16 @@ if [ -f '/home/ozanseymen/software/gcloud/google-cloud-sdk/path.zsh.inc' ]; then
 if [ -f '/home/ozanseymen/software/gcloud/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/ozanseymen/software/gcloud/google-cloud-sdk/completion.zsh.inc'; fi
 
 setopt ignore_eof
+
+[[ -s "/home/ozanseymen/.gvm/scripts/gvm" ]] && source "/home/ozanseymen/.gvm/scripts/gvm"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/ozanseymen/.local/bin:$PATH"
+
+# bun completions
+[ -s "/home/ozanseymen/.bun/_bun" ] && source "/home/ozanseymen/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
